@@ -1,0 +1,77 @@
+<div  class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Faqs Manger</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Lesson</a></li>
+          <li class="breadcrumb-item active">{{titleHead}} Faq</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form #form=ngForm (ngSubmit)="formFo(form)">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="form-title"><span>Details</span></h5>
+              </div>
+
+              <div class="col-12 ">
+                <div class="form-group">
+                  <label>Question</label>
+                  <input type="text" name="question" [(ngModel)]="model.question" class="form-control" required>
+                </div>
+              </div>
+              <div class="col-12 ">
+                <div class="form-group">
+                  <label>Answer</label>
+                  <input type="text" name="answer" [(ngModel)]="model.answer" class="form-control" required>
+                </div>
+              </div>
+              <input type="hidden"  id="idf" name="idf" [(ngModel)]="model.id">
+              <input type="hidden" id="id" name="id" [(ngModel)]="model.lessonId">
+              <div class="col-12">
+                <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Question</th>
+            <th scope="col">Answer</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let item of faq">
+            <th scope="row">1</th>
+            <td> {{item.question}}</td>
+            <td> {{item.answer}}</td>
+            <td> <div class="mt-3">
+              <span style="font-size: 25px; color: Dodgerblue;">
+                <a data-toggle="tooltip" (click)="editFaq(item.id)" delay="0"
+                  data-placement="top" title="edit"><i class="fas fa-pen-square"></i></a>
+              </span>
+              <span style="font-size: 22px; color: red;">
+                <a data-toggle="tooltip" (click)="removeFaq(item.id)" delay="0" data-placement="top" title="delete"><i
+                  class="ml-3 mb-2 fas fas fa-trash"></i></a>
+              </span>
+            </div></td>
+          </tr>
+          <small class="text-danger ml-4" *ngIf="exist">No Faqs Found</small>
+        </tbody>
+      </table>
+  </div>
+</div>

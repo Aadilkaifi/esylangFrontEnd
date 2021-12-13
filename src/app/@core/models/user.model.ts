@@ -1,0 +1,29 @@
+export interface User {
+  id: number;
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  enrollment: string;
+  image: string;
+  language: string;
+  level: string;
+  gender: string;
+  dateOfBirth: string;
+  dateOfJoining: string;
+  qualification: string;
+  mobile: string;
+  experience: string;
+  adress: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+  timezone: string;
+  ipAdress: string;
+  browser: string;
+  device: string;
+  status: string;
+  created: string;
+  updated: string;
+}

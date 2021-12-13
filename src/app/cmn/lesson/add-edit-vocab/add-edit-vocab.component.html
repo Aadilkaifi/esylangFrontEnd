@@ -1,0 +1,67 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Vocabulary Manger</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Vocabularies</a></li>
+          <li class="breadcrumb-item active">{{titleHead}} Vocab</li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form #form=ngForm (ngSubmit)="formFo(form)">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="form-title"><span>Details</span></h5>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Word</label>
+                  <input type="text"name="word"  id="word" [(ngModel)]="model.word" class="form-control" required>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Meaning</label>
+                  <input type="text"name="meaning"  id="meaning" [(ngModel)]="model.meaning" class="form-control" required>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>The Form</label>
+                  <input type="text"name="theForm"  id="theForm" [(ngModel)]="model.theForm" class="form-control" required>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>An Form</label>
+                  <input type="text" name="anForm"  id="anForm" [(ngModel)]="model.anForm" class="form-control" required>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Audio</label>
+                  <input type="file" accept="audio/*" name="audio"  (change)="uploadAudio($event)" class="form-control" required>
+                  <small *ngIf="sizeErrorMessageDocC!=null" class="text-danger" class="text-danger">{{sizeErrorMessageDocC}}</small>
+                </div>
+              </div>
+              <input type="hidden"  id="id" name="id" [(ngModel)]="model.id">
+              <input type="hidden"  id="vid" name="vid" [(ngModel)]="model.vid">
+              <div class="col-12">
+                <button type="submit" [disabled]="!form.valid" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

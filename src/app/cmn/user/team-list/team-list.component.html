@@ -1,0 +1,64 @@
+<div class="content container-fluid">
+<app-breadcrum  [title]="'Teams'" [crum1]="'users'" [crum2]="'Manage Teams'"></app-breadcrum>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded">
+          <li class="nav-item"><a class="nav-link active" href="#solid-rounded-tab1" data-toggle="tab">Teams</a></li>
+          <li class="nav-item"><a class="nav-link" href="#solid-rounded-tab2" data-toggle="tab">Users</a></li>
+          <li class="nav-item"><a class="nav-link" href="#solid-rounded-tab3" data-toggle="tab">Login Activity</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane show active" id="solid-rounded-tab1">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  </div></th>
+                  <td>Teacher</td>
+                </tr>
+                <tr>
+                  <th scope="row"><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  </div></th>
+                  <td>Student</td>
+                </tr>
+                <tr>
+                  <th scope="row"><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  </div></th>
+                  <td>Manager</td>
+                </tr>
+                <tr>
+                  <th scope="row"><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  </div></th>
+                  <td>Other</td>
+                </tr>
+                <!-- <tr>
+                  <th scope="row"><div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  </div></th>
+                  <td>Mark</td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane" id="solid-rounded-tab2">
+            Tab content 2
+          </div>
+          <div class="tab-pane" id="solid-rounded-tab3">
+            Tab content 3
+          </div>
+        </div>
+  </div>
+</div>
+</div>

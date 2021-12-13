@@ -1,0 +1,63 @@
+<!-- Main Wrapper -->
+<div class="main-wrapper login-body">
+  <div class="login-wrapper">
+    <div class="container">
+        <div class="loginbox">
+            <div class="login-left">
+    <img class="img-fluid" src="assets/img/logo-white.png" alt="Logo">
+              </div>
+              <div class="login-right">
+    <div class="login-right-wrap">
+      <h1>Login</h1>
+      <p class="account-subtitle">Access to our dashboard</p>
+
+      <!-- Form -->
+      <form #login=ngForm (ngSubmit)="authUser(login)">
+        <div class="form-group">
+          <input class="form-control" type="text" placeholder="Enter a valid Username" [(ngModel)]="model.username" #Username="ngModel"
+          id="name" name="Username" required>
+          <div *ngIf="Username.invalid && (Username.dirty || Username.touched)" class="">
+            <div *ngIf="Username.errors?.required">
+              <small class="text-danger">Username is required.</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input class="form-control" [type]="passType" placeholder="Password" [(ngModel)]="model.password" placeholder="Enter Password"
+          #password="ngModel" id="password" name="password" required>
+          <div *ngIf="password.invalid && (password.dirty || password.touched)">
+            <div *ngIf="password.errors?.required">
+              <small class="text-danger"> password is required.</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" [disabled]="!login.valid" type="submit">
+            Login
+          </button>
+
+        </div>
+      </form>
+      <!-- /Form -->
+
+      <div class="text-center forgotpass"><a routerLink="/forgot-password">Forgot Password?</a></div>
+      <div class="login-or">
+        <span class="or-line"></span>
+        <span class="span-or">or</span>
+      </div>
+
+      <!-- Social Login -->
+      <!-- <div class="social-login">
+        <span>Login with</span>
+        <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="google"><i class="fab fa-google"></i></a>
+      </div> -->
+      <!-- /Social Login -->
+
+      <div class="text-center dont-have">Don’t have an account? <a routerLink="/register">Register</a></div>
+    </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- /Main Wrapper -->

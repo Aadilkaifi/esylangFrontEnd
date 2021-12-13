@@ -1,0 +1,107 @@
+<div class="content container-fluid">
+   <!-- Page Header -->
+   <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Users</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Users</a></li>
+          <li class="breadcrumb-item active">All Users</li>
+        </ul>
+      </div>
+      <div class="col-auto text-right float-right ml-auto">
+        <a (click)="exportToExcel()" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+        <a routerLink="/user/add-user" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+  <!-- /Page Header -->
+  <!-- /Page Header -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div >
+
+              <div class="col-6 col-sm-3">
+                <div class="form-group">
+                  <select class="form-control" (change)="filterTeam($event)"  name="gender">
+                    <option value = "1">Show All</option>
+                    <option *ngFor="let item of teams" [value]="item.teamCode">{{ item.team }}</option>
+                  </select>
+                </div>
+                <!-- <a class="ml-3 table-icons" data-toggle="tooltip" delay="0" (click)="reset()" data-placement="top" title="reset"><i
+                  class="fas fa-sync-alt"></i></a> -->
+              </div>
+          </div>
+
+        <!-- <a class="ml-3" data-toggle="tooltip" delay="0" data-placement="top" title="Excel export"><i
+            class="fas fa-file-download"></i></a> -->
+            <input class="float-right mb-0" (change)="getSearchText($event)"  type="text" placeholder="search...">
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>username</th>
+                  <th>Type</th>
+                  <th>Language</th>
+                  <th>mobile</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="cursor: pointer;" (dblclick)="viewUser(i)"  *ngFor="let item of users | paginate: { itemsPerPage: itemsPerPage , currentPage: p, totalItems: totalItems}; let i = index">
+                  <td>{{i + 1}}</td>
+                  <td>{{item.name}}</td>
+                  <td [ngClass]="{'text-danger' : item.status === 0 }">{{item.username}}</td>
+                  <td>{{item.type}}</td>
+                  <td>{{item.language}}</td>
+                  <td>{{item.mobile}}</td>
+                  <td>
+                    <div class="dropleft">
+                      <i class="fas fa-ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" (click)="viewUser(i)">view/Edit</a>
+                        <div *ngIf="item.status=='1'; then Active else inaActive">
+                        </div>
+
+                        <ng-template #Active>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Disable User</a>
+                        </ng-template>
+
+                        <ng-template #inaActive>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Enable User</a>
+                        </ng-template>
+                        <!-- <a class="dropdown-item"  data-toggle="modal" data-target="#exampleModalCenter">Change Password</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Delete User</a> -->
+                      </div>
+                    </div>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <pagination-controls (pageChange)="getPage(p = $event)"></pagination-controls>
+              </div>
+              <div class="col-md-6">
+                <span class="text-right mb-5">
+                  <p>Total Records: {{totalItems}}</p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer>
+  <p>Copyright © 2021 Esylang.</p>
+</footer>

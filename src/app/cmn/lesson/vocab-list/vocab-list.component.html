@@ -1,0 +1,110 @@
+<div class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Welcome Back {{username}}</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Vocabs</a></li>
+          <li class="breadcrumb-item active">You are doing great!!</li>
+        </ul>
+      </div>
+      <div class="col-auto text-right float-right ml-auto ">
+        <a *ngIf="admin" (click)="exportToExcel()" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i>
+          Download</a>
+        <a *ngIf="admin || teacher || department" (click)="addVocab()" class="btn btn-primary mr-2"><i
+            class="fas fa-plus"></i></a>
+        <a *ngIf="admin || teacher || department" data-toggle="tooltip" delay="0" data-placement="top" title="Download Excel Template" (click)="downloadTemp(templateUrl)" class="btn btn-primary"><i
+            class="fas fa-download"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <input *ngIf="admin || teacher || department" type="file" name="file-input" id="file-input" class="file-input__input" (change)="uploadVocabs($event)" />
+          <input class="float-right mb-0" (change)="getSearchText($event)" type="text" placeholder="search...">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">The Form</th>
+                  <th  scope="col">An Form</th>
+                  <th  scope="col">Word</th>
+                  <th  scope="col">Meaning</th>
+                  <th scope="col">Audio</th>
+                  <th  *ngIf="admin || teacher || department" scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="cursor: pointer;"
+                  *ngFor="let item of bind | paginate: { itemsPerPage: itemsPerPage , currentPage: p, totalItems: totalItems } let i = index">
+                  <th scope="row">
+                    <p>{{i+1}}</p>
+                  </th>
+                  <td>
+                    <p>{{item.theForm}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.anForm}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.word}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.meaning}}</p>
+                  </td>
+                  <div *ngIf="item.audio==null; then ShowInput else showAudio">
+                  </div>
+                  <ng-template #ShowInput>
+                    <td>
+                    <input  *ngIf="admin || teacher || department" type="file" accept="audio/*" name="Audio--{{item.id}}" (change)="uploadAudio($event,item.id)" id="image" nbInput fullWidth
+                      shape="rectangle" placeholder="">
+                      <p *ngIf="student" class="text-danger">Not Found</p>
+                    </td>
+                  </ng-template>
+
+                  <ng-template #showAudio>
+                    <td>
+                      <audio controls>
+                        <source [src]="item.audio" type="audio/mp3">
+                        Your browser does not support the audio element.
+                      </audio>
+                    </td>
+                  </ng-template>
+                  <td *ngIf="admin || teacher || department" >
+                    <div class="dropleft">
+                      <i class="fas fa-ellipsis-v" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"></i>
+                      <div  class="dropdown-menu">
+                        <a class="dropdown-item" (click)="view(item.id)">Edit</a>
+                        <a class="dropdown-item" (click)="remove(item.id)">Delete</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <pagination-controls (pageChange)="getPage(p = $event)"></pagination-controls>
+              </div>
+              <div class="col-md-6">
+                <span class="text-right mb-5">
+                  <p>Total Records: {{totalItems}}</p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer>
+  <p>Copyright © 2021 Esylang.</p>
+</footer>

@@ -1,0 +1,32 @@
+export class Users {
+  id: number;
+  name: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  email: string;
+  enrollment: any;
+  image: string;
+  language: string;
+  level: number;
+  gender: string;
+  dateOfBirth: string;
+  dateOfJoining: string;
+  qualification: string;
+  mobile: string;
+  experience: string;
+  adress: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+  timezone: string;
+  ipAdress: string;
+  browser: string;
+  device: string;
+  status: string;
+  created: string;
+  updated: string;
+  type: string;
+  teamCode: number;
+}

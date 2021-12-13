@@ -1,0 +1,118 @@
+<div class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Welcome Back {{username}}</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Lessons</a></li>
+          <li class="breadcrumb-item active">You are doing great!!</li>
+        </ul>
+      </div>
+      <div class="col-auto text-right float-right ml-auto">
+        <a *ngIf="admin" (click)="exportToExcel()" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+        <a *ngIf="admin || teacher || department" routerLink="/lesson/add-lesson" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div >
+
+            <div *ngIf="admin" class="col-6 col-sm-3">
+              <div class="form-group">
+                <select class="form-control" (change)="$filter($event)"  name="lang">
+                  <option value = "1">Show All</option>
+                  <option *ngFor="let item of lang" [value]="item.id">{{ item.language }}</option>
+                </select>
+              </div>
+            </div>
+        </div>
+          <input class="float-right mb-0" (change)="getSearchText($event)" type="text" placeholder="search...">
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">title</th>
+                  <th *ngIf="admin || teacher || department" scope="col">level</th>
+                  <th *ngIf="admin || teacher || department" scope="col">Language</th>
+                  <th *ngIf="admin || teacher || department" scope="col">teacher</th>
+                  <th scope="col">date</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr (dblclick)="viewUser(i)" style="cursor: pointer;"
+                  *ngFor="let item of bind | paginate: { itemsPerPage: itemsPerPage , currentPage: p, totalItems: totalItems } let i = index">
+                  <th scope="row">
+                    <p>{{i+1}}</p>
+                  </th>
+                  <td>
+                    <p>{{item.title}}</p>
+                  </td>
+                  <td *ngIf="admin || teacher || department">
+                    <p  [ngClass]="{'text-danger' : item.level === 'Beginner'}">{{item.level}}</p>
+                  </td>
+                  <td  *ngIf="admin || teacher || department">
+                    <p [ngClass]="{'text-primary' : item.language === 'french' || item.language === 'French' }">{{item.language}}</p>
+                  </td>
+                  <td *ngIf="admin || teacher || department">
+                    <p>{{item.teacher}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.date | date}}</p>
+                  </td>
+                  <td  *ngIf="admin || teacher || department">
+                    <div class="dropleft">
+                      <i class="fas fa-ellipsis-v" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"></i>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" (click)="viewUser(i)">view/Edit</a>
+                        <div *ngIf="item.status=='1'; then Active else inaActive">
+                        </div>
+
+                        <ng-template #Active>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Disable Lesson</a>
+                        </ng-template>
+
+                        <ng-template #inaActive>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Enable Lesson</a>
+                        </ng-template>
+                        <a class="dropdown-item" [routerLink]="['/lesson/faq', item.id]">Faqs</a>
+                        <a class="dropdown-item"  >Exercise</a>
+                        <a class="dropdown-item" [routerLink]="['/lesson/chapter', item.id]">Chapter</a>
+                        <a class="dropdown-item" [routerLink]="['/lesson/view-lesson', item.id]">View Lesson</a>
+
+                      </div>
+                    </div>
+                  </td>
+                  <td *ngIf="student"> <a class="btn btn-outline-primary mr-2"><i class="fas fa-arrow"></i> Attend</a></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <pagination-controls (pageChange)="getPage(p = $event)"></pagination-controls>
+              </div>
+              <div class="col-md-6">
+                <span class="text-right mb-5">
+                  <p>Total Records: {{totalItems}}</p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer>
+  <p>Copyright © 2021 Esylang.</p>
+</footer>

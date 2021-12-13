@@ -1,0 +1,76 @@
+<!-- VIDEO -->
+<div class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Lesson Qu'est-ce que le Lorem Ipsum</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Lessons</a></li>
+          <li class="breadcrumb-item active">Chapter/Faq/Exercise</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="col-md-6">
+            <!-- video -->
+            <div *ngFor="let item of chapter">
+              <iframe [src]="item.url" width="560" height="315" frameborder="0" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
+              <li class="nav-item"><a class="nav-link active" href="#bottom-justified-tab1"
+                  data-toggle="tab">Chapter</a></li>
+              <li class="nav-item"><a class="nav-link" href="#bottom-justified-tab2" data-toggle="tab">Exercise</a></li>
+              <li class="nav-item"><a class="nav-link" href="#bottom-justified-tab3" data-toggle="tab">Faqs</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane show active" id="bottom-justified-tab1">
+                <!-- feild one -->
+                <span [innerHtml]="modelChapter.f1"></span>
+              </div>
+              <div class="tab-pane" id="bottom-justified-tab2">
+                Exercise
+              </div>
+              <div class="tab-pane" id="bottom-justified-tab3">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Question</th>
+                      <th scope="col">Answer</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of faq">
+                      <th scope="row">1</th>
+                      <td> {{item.question}}</td>
+                      <td> {{item.answer}}</td>
+                      <small class="text-danger ml-4" *ngIf="item.length == 0">No Faqs Found</small>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3">
+              <hr>
+              <span [innerHtml]="modelChapter.f2"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer>
+  <p>Copyright © 2021 Esylang.</p>
+</footer>

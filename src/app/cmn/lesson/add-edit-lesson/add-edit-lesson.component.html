@@ -1,0 +1,89 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Lesson Manger</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Lesson</a></li>
+          <li class="breadcrumb-item active">{{titleHead}} Lesson</li>
+        </ul>
+      </div>
+    </div>
+</div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form #userForm=ngForm (ngSubmit)="formFo(userForm)">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="form-title"><span>Details</span></h5>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Language<span style="color:red">*</span></label>
+                  <select class="form-control" #language="ngModel" name="language" [(ngModel)]="model.language" >
+                      <option *ngFor="let item of lang" [value]="item.id">{{ item.language }}</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Level</label>
+                  <select class="form-control" name="level" [(ngModel)]="model.level">
+                      <option *ngFor="let item of level" [value]="item.id">{{ item.level }}</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Exercise Type</label>
+                  <select class="form-control" #type="" name="type" [(ngModel)]="model.exerciseType">
+                      <option  *ngFor="let item of exType" [value]="item.id"> {{item.value}}</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Display Order</label>
+                  <input type="number" name="orderNo" [(ngModel)]="model.orderNo" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Title</label>
+                  <input type="text" name="title" [(ngModel)]="model.title" class="form-control" required>
+                </div>
+              </div>
+
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Date</label>
+                  <input type="date"  name="dob" [(ngModel)]="model.date" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Description<span style="color:red">*</span></label>
+                  <input type="textarea"  name="mobile" #mobile="ngModel" [(ngModel)]="model.description" class="form-control" required>
+                </div>
+              </div>
+              <input type="hidden" name="id" [(ngModel)]="model.id">
+              <div class="col-12">
+                <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

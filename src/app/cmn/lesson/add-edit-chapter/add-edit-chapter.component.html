@@ -1,0 +1,58 @@
+<div  class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Chapter Manger</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Lesson</a></li>
+          <li class="breadcrumb-item active">{{titleHead}} Chapter</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form #userForm=ngForm (ngSubmit)="formFo(userForm)">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="form-title"><span>Details</span></h5>
+              </div>
+
+              <div class="col-12 ">
+                <div class="form-group">
+                  <label>Video Url</label>
+                  <input type="text" name="title" [(ngModel)]="model.url" class="form-control" required>
+                </div>
+              </div>
+
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Part One</label>
+                  <ckeditor name="f1" [(ngModel)]="model.f1"></ckeditor>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Part Two</label>
+                  <ckeditor name="f2" [(ngModel)]="model.f2">
+                  </ckeditor>
+                </div>
+              </div>
+
+
+              <input type="hidden" name="id" [(ngModel)]="model.id">
+              <div class="col-12">
+                <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

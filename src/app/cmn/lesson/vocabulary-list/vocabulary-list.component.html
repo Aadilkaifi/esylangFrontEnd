@@ -1,0 +1,103 @@
+<div class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="page-title">Welcome Back {{username}}</h3>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Vocabularies</a></li>
+          <li class="breadcrumb-item active">You are doing great!!</li>
+        </ul>
+      </div>
+      <div class="col-auto text-right float-right ml-auto">
+        <a *ngIf="admin" (click)="exportToExcel()" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i>
+          Download</a>
+        <a *ngIf="admin || teacher || department" routerLink="/lesson/add-vocabulary" class="btn btn-primary"><i
+            class="fas fa-plus"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <input class="float-right mb-0" (change)="getSearchText($event)" type="text" placeholder="search...">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th *ngIf="admin || teacher || department" scope="col">Description</th>
+                  <th *ngIf="admin || teacher || department" scope="col">Language</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of bind | paginate: { itemsPerPage: itemsPerPage , currentPage: p, totalItems: totalItems } let i = index">
+                  <td scope="row">
+                    <p>{{i+1}}</p>
+                  </td>
+                  <td  style="cursor: pointer;">
+                    <p (click)="viewVocabs(item.id)" [ngClass]="{'text-danger' : item.status === 0}">{{item.title}}</p>
+                  </td>
+                  <td *ngIf="admin || teacher || department">
+                    <p>{{item.description}}</p>
+                  </td>
+                  <td *ngIf="admin || teacher || department">
+                    <p [ngClass]="{'text-primary' : item.language === 'french' || item.language === 'French' }">
+                      {{item.language}}</p>
+                  </td>
+                  <td>
+                    <p>{{item.date | date}}</p>
+                  </td>
+                  <td *ngIf="student">
+                    <i (click)="favorite()" style="font-size: 30px;" class="fa fa-5x" [class.fa-star]="isFavorite"
+                      [class.fa-star-o]="!isFavorite"></i>
+                  </td>
+                  <td *ngIf="admin || teacher || department">
+                    <div class="dropleft">
+                      <i class="fas fa-ellipsis-v" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"></i>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" [routerLink]="['/lesson/edit-vocabulary',item.id]">Edit</a>
+                        <div *ngIf="item.status=='1'; then Active else inaActive">
+                        </div>
+                        <ng-template #Active>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Disable Vocabulary</a>
+                        </ng-template>
+                        <ng-template #inaActive>
+                          <a class="dropdown-item" (click)="activeInactive(item.id)">Enable Vocabulary</a>
+                        </ng-template>
+                        <a class="dropdown-item" (click)="viewVocabs(item.id)">Vocabs</a>
+                        <a class="dropdown-item" (click)="remove(item.id)">Delete</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="row mt-2">
+              <div class="col-md-6">
+                <pagination-controls (pageChange)="getPage(p = $event)"></pagination-controls>
+              </div>
+              <div class="col-md-6">
+                <span class="text-right mb-5">
+                  <p>Total Records: {{totalItems}}</p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer>
+  <p>Copyright © 2021 Esylang.</p>
+</footer>

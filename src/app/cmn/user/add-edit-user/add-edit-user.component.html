@@ -1,0 +1,226 @@
+<div class="content container-fluid">
+  <app-breadcrum [title]="title" [crum1]="'Users'" [crum2]="teamName"></app-breadcrum>
+
+  <div *ngIf="show" class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form #userForm=ngForm (ngSubmit)="addUser(userForm)">
+            <div class="row">
+              <div class="col-12">
+                <h5 class="form-title"><span>Basic Details</span></h5>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Role<span style="color:red">*</span></label>
+                  <select class="form-control"
+                   #team="ngModel" name="team" (ngModelChange)="getTeamType($event)" [(ngModel)]="model.teamCode" required>
+                      <option *ngFor="let item of teams" [value]="item.teamCode">{{ item.team }}</option>
+                      <option *ngIf="model.teamCode==102" value="102">Admin</option>
+                    </select>
+                    <div *ngIf="team.invalid && (team.dirty || team.touched)">
+                      <div *ngIf="team.errors?.required">
+                        <small class="text-danger"> Role is required.</small>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>User Type</label>
+                  <select class="form-control" #type="" name="type" [(ngModel)]="model.type">
+                      <option value="Internal">Internal</option>
+                      <option value="External">External</option>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Language<span style="color:red">*</span></label>
+                  <select class="form-control" #language="ngModel" name="language" [(ngModel)]="model.language" required>
+                      <option *ngFor="let item of lang" [value]="item.id">{{ item.language }}</option>
+                    </select>
+                    <div *ngIf="language.invalid && (language.dirty || language.touched)">
+                      <div *ngIf="language.errors?.required">
+                        <small class="text-danger"> language is required.</small>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+
+              <div *ngIf="student" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Level</label>
+                  <select class="form-control" name="level" [(ngModel)]="model.level">
+                      <option *ngFor="let item of level" [value]="item.id">{{ item.level }}</option>
+                    </select>
+                </div>
+              </div>
+
+              <div *ngIf="id!==null" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Enrollment</label>
+                  <input type="text" name="enrollment" [(ngModel)]="model.enrollment" class="form-control" disabled>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Full Name<span style="color:red">*</span></label>
+                  <input type="text"  name="name" class="form-control" #name="ngModel" [(ngModel)]="model.name" required>
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)">
+                    <div *ngIf="name.errors?.required">
+                      <small class="text-danger"> Name is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Gender</label>
+                  <select class="form-control"  name="gender" [(ngModel)]="model.gender" >
+                    <option value = "Male">Male</option>
+                    <option value = "Female">Female</option>
+                    <option value = "Others">Others</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Date of Birth</label>
+                  <input type="date"  name="dob" [(ngModel)]="model.dateOfBirth" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Mobile<span style="color:red">*</span></label>
+                  <input type="text"  name="mobile" #mobile="ngModel" [(ngModel)]="model.mobile" class="form-control" required>
+                  <div *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+                    <div *ngIf="mobile.errors?.required">
+                      <small class="text-danger"> Mobile With country code is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Joining Date<span style="color:red">*</span></label>
+                  <input type="date" #dateOfJoining="ngModel"   name="dateOfJoining" [(ngModel)]="model.dateOfJoining" class="form-control" required>
+                  <div *ngIf="dateOfJoining.invalid && (dateOfJoining.dirty || dateOfJoining.touched)">
+                    <div *ngIf="mobile.errors?.required">
+                      <small class="text-danger"> Joining Date is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="teacher || department" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Qualification</label>
+                  <input class="form-control" name="qualification" [(ngModel)]="model.qualification" type="text">
+                </div>
+              </div>
+              <div *ngIf="teacher || department" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Experience</label>
+                  <input class="form-control" name="experience" [(ngModel)]="model.experience" type="text">
+                </div>
+              </div>
+              <div class="col-12">
+                <h5 class="form-title"><span>Login Details</span></h5>
+              </div>
+              <div class="col-12 col-sm-6">
+
+                <div class="form-group">
+                  <label>Username<span style="color:red">*</span></label>
+                  <input type="text" (keypress)="eventHandler($event)" name="username" #username="ngModel" [(ngModel)]="model.username" class="form-control" required>
+                  <div *ngIf="username.invalid && (username.dirty || username.touched)">
+                    <div *ngIf="username.errors?.required">
+                      <small class="text-danger"> Username is required.</small>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Email ID<span style="color:red">*</span></label>
+                  <input type="email" name="email" #email="ngModel" [(ngModel)]="model.email" class="form-control" required>
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)">
+                    <div *ngIf="email.errors?.required">
+                      <small class="text-danger"> email is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="id==null" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Password<span style="color:red">*</span></label>
+                  <input type="password" name="password" #password="ngModel" [(ngModel)]="model.password" class="form-control" [required]="id==null">
+                  <div *ngIf="password.invalid && (password.dirty || password.touched)">
+                    <div *ngIf="password.errors?.required">
+                      <small class="text-danger"> Password is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="id==null" class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Confirm Password</label>
+                  <input type="password" name="confirmPassword" #confirmPassword="ngModel"  [(ngModel)]="model.confirmPassword" class="form-control" [required]="id==null">
+                  <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
+                    <div *ngIf="confirmPassword.errors?.required">
+                      <small class="text-danger">Confirm Password is required.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <h5 class="form-title"><span>Address</span></h5>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                <label>Address</label>
+                  <input type="text" name="adress" [(ngModel)]="model.adress" class="form-control" >
+
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" name="city" [(ngModel)]="model.city" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>State</label>
+                  <input type="text" name="staTE" [(ngModel)]="model.state" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Zip Code</label>
+                  <input type="text" name="pincode" [(ngModel)]="model.pincode" class="form-control">
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-group">
+                  <label>Country</label>
+                  <input type="text" name="country" [(ngModel)]="model.country" class="form-control">
+                </div>
+              </div>
+              <input type="hidden" name="id" [(ngModel)]="model.id">
+              <div class="col-12">
+                <button type="submit" [disabled]="!userForm.valid" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

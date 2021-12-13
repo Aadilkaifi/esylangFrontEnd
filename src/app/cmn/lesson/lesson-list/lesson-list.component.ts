@@ -1,0 +1,279 @@
+import { Language } from './../../../@core/models/language/language.model';
+import { Component, NgZone, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Toaster } from 'ngx-toast-notifications';
+import { SearchText } from 'src/app/@core/models/search.model';
+import { AuthenticationService } from 'src/app/@core/services/authentication.service';
+import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
+import * as xlsx from 'xlsx';
+import * as FileSaver from 'file-saver';
+import { Plesson } from 'src/app/@core/models/p-lessons/p-lesson.model';
+import { PlessonsService } from 'src/app/@core/services/p-lessons/p-lessons.service';
+import { LanguageService } from 'src/app/@core/services/languages/language.service';
+
+@Component({
+  selector: 'app-lesson-list',
+  templateUrl: './lesson-list.component.html',
+  styleUrls: ['./lesson-list.component.css'],
+})
+export class LessonListComponent implements OnInit {
+  public bind: Plesson[];
+  lang: Language[];
+  p: number;
+  itemsPerPage: number;
+  totalItems: number;
+  title = 'Lesson';
+  username: string;
+  model: SearchText = new SearchText();
+  userteams: number[] = [];
+  env = environment;
+  admin = false;
+  student = false;
+  department = false;
+  teacher = false;
+  filter: Language = new Language();
+
+  constructor(private router: Router,
+              private service: PlessonsService,
+              private toaster: Toaster,
+              private auth: AuthenticationService,
+              private langService: LanguageService,
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.userteams.push(...this.auth.getLoggedValidUserTeamCodes());
+    this.getAll(1);
+    this.username = this.auth.getUsername();
+    this.getType();
+    this.getLanguages();
+  }
+
+  public getAll(e): void {
+    this.service.getallWp(e).subscribe(x => {
+      const data = x;
+      if (data.status === 1) {
+        this.bind = data.data.data;
+        this.totalItems = data.data.total;
+        this.itemsPerPage = data.data.per_page;
+      }
+    });
+  }
+
+  getPage(page) {
+    this.p = page;
+    this.getAll(this.p);
+  }
+
+  activeInactive(e) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Only Active ${this.title} will reflect`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Please!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.service.enableDisable(e).subscribe(res => {
+          const data = res;
+          if (data.status === 1) {
+            this.toaster.open({
+              text: data.message,
+              caption: data.code + ' Ok!',
+              type: 'light',
+            });
+            this.getAll(this.p);
+          } else if (data.status === 0) {
+            this.toaster.open({
+              text: data.message,
+              caption: data.code + 'Error Occured!',
+              type: 'danger',
+            });
+          } else {
+            this.toaster.open({
+              text: 'Something went wrong',
+              caption: 'Error Occured!',
+              type: 'danger',
+            });
+          }
+        });
+      }
+    });
+  }
+
+  public remove(e) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'you wont be able to revert this',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.service.delete(e).subscribe(res => {
+          const data = res;
+          if (data.status === 1) {
+            this.toaster.open({
+              text: data.message,
+              caption: data.code + ' Ok!',
+              type: 'light',
+              position: 'bottom-center',
+            });
+            this.getAll(this.p);
+          } else if (data.status === 0) {
+            this.toaster.open({
+              text: data.message,
+              caption: data.code + ' Error Occured!',
+              type: 'danger',
+              position: 'bottom-center',
+            });
+          } else {
+            this.toaster.open({
+              text: 'Something went Wrong',
+              caption: data.code + ' Error Occured!',
+              type: 'danger',
+              position: 'bottom-center',
+            });
+          }
+        });
+      }
+    });
+  }
+
+  search(e) {
+    this.service.searchPlessons(e).subscribe(res => {
+      const data = res;
+      if (data.status === 1 && data.data.data.length > 0) {
+        this.bind = data.data.data;
+        this.totalItems = data.data.total;
+        this.itemsPerPage = data.data.per_page;
+      } else if (data.status === 0) {
+        this.toaster.open({
+          text: data.message,
+          caption: data.code + ' Error occured',
+          type: 'danger',
+        });
+      } else if (data.data.total === 0) {
+        this.toaster.open({
+          text: 'Nothing found that matches: ' + this.model.searchText,
+          caption: '404' + ' Error occured',
+          type: 'danger',
+        });
+      }
+    });
+  }
+
+  getSearchText(event) {
+    const text = event.target.value;
+    if (text !== '') {
+      this.model.searchText = text;
+      this.search(this.model);
+    } else {
+      this.getAll(1);
+      return;
+    }
+
+  }
+
+  reset() {
+    this.getAll(1);
+  }
+
+  getColArray(obj: any): xlsx.ColInfo[] {
+    const columnsToHide = ['status'];
+    const colArray: xlsx.ColInfo[] = Object.keys(obj).map(item => {
+      return columnsToHide.includes(item) ? { hidden: true } : { width: 20 };
+    });
+    return colArray;
+  }
+
+  exportToExcel() {
+    this.service.excelImport().subscribe(result => {
+      const data = result.data;
+      const fname = this.title + '_export_' + '.xlsx';
+      this.exportAsExcelFile(data, fname);
+    });
+  }
+
+  exportAsExcelFile(json: any[], excelFileName: string, colInfos?: xlsx.ColInfo[], opts?: xlsx.JSON2SheetOpts): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const worksheet: xlsx.WorkSheet = xlsx.utils.json_to_sheet(json, opts);
+
+    if (colInfos !== undefined) {
+      worksheet['!cols'] = colInfos;
+    }
+    const workbook: xlsx.WorkBook = { Sheets: { ['data']: worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const data: Blob = new Blob([excelBuffer], { type: EXCEL_TYPE });
+    FileSaver.saveAs(data, excelFileName);
+  }
+
+  getType() {
+    if (this.userteams.includes(this.env.esylangTeams.admin) || this.userteams.includes(this.env.esylangTeams.superAdmin)) {
+      return this.admin = true;
+    } else if (this.userteams.includes(this.env.esylangTeams.teacher)) {
+      return this.teacher = true;
+    } else if (this.userteams.includes(this.env.esylangTeams.student)) {
+      return this.student = true;
+    } else if (this.userteams.includes(this.env.esylangTeams.depratment)) {
+      return this.department = true;
+    }
+  }
+
+  $filter(event) {
+    const x: string = event.target.value;
+    if (x === '1') {
+      this.getAll(1);
+    } else {
+      this.model.language = x;
+      this.filterLesson(this.model);
+    }
+
+  }
+
+  public getLanguages() {
+    this.langService.getallNp().subscribe(res => {
+      const data = res.data as Array<Language>;
+      if (data && data.length > 0) {
+        this.lang = data;
+      } else {
+        this.toaster.open({
+          text: 'languages not Found',
+          caption: '404' + ' Error Occured!',
+          type: 'danger',
+        });
+      }
+    });
+  }
+
+  viewUser(e) {
+    if (this.admin === true || this.department === true) {
+      this.router.navigate([`/lesson/edit-lesson/${this.bind[e].id}`]);
+    } else {
+      this.router.navigate([`/lesson/view-lesson/${this.bind[e].id}`]);
+    }
+  }
+
+  public filterLesson(e): void {
+    this.service.filterLesson(e).subscribe(res => {
+      const data = res;
+      if (data.status === 1) {
+        this.bind = data.data.data;
+        this.totalItems = data.data.total;
+        this.itemsPerPage = data.data.per_page;
+      } else if (data.status === 0) {
+        this.toaster.open({
+          text: data.message,
+          caption: data.code + ' Error occured',
+          type: 'danger',
+        });
+      }
+    });
+  }
+}
